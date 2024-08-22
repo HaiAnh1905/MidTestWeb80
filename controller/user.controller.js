@@ -1,6 +1,7 @@
 import UserModel from "../model/user.js";
 import crypto from "crypto";
 import WorkExpModel from "../model/skill.js";
+import AdditionalModel from "../model/more.js"
 
 const UserController = {
   createNewUser: async (req, res) => {
@@ -71,6 +72,7 @@ const UserController = {
     const { id } = req.body;
     const deletaData = await UserModel.deleteOne({ _id: id });
     const deleteInfo = await WorkExpModel.deleteOne({ userId: id });
+    const deleteAdditionalInfo = await AdditionalModel.deleteOne({ userId: id });
     res.status(201).send({
       message: "Success",
     });

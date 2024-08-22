@@ -6,10 +6,10 @@ const UserRouter = Router();
 
 UserRouter.post('/createUser', UserMiddleware.validateNewUser ,UserController.createNewUser);
 
-UserRouter.get('/getUser', UserMiddleware.checkIfUserExist, UserController.getUserData)
+UserRouter.get('/getUser', UserMiddleware.checkAuthentication, UserController.getUserData)
 
-UserRouter.post('/updateUser', UserMiddleware.checkIfUserExist, UserController.updateUserData)
+UserRouter.put('/updateUser', UserMiddleware.checkAuthentication,UserMiddleware.checkAuthorization, UserController.updateUserData)
 
-UserRouter.delete('/deleteUser', UserMiddleware.checkIfUserExist, UserController.deleteUserData)
+UserRouter.delete('/deleteUser', UserMiddleware.checkAuthentication, UserController.deleteUserData)
 
 export default UserRouter

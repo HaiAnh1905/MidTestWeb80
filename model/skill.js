@@ -3,8 +3,8 @@ import mongoose from "mongoose";
 
 const workExperienceSchema = new mongoose.Schema({
     projectName: String,
-    startDate: Date,
-    endDate: Date, // null if ongoing
+    startDate: String,
+    endDate: String, // null if ongoing
     description: String,
     company: String,
     role: String,

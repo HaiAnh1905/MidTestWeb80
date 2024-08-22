@@ -1,15 +1,16 @@
 import { Router } from "express";
 import WorkExpController from "../controller/exp.controller.js";
 import WorkExpMiddleware from "../middleware/exp.middleware.js";
+import UserMiddleware from "../middleware/user.middleware.js";
 
 const WorkExpRouter = Router();
 
-WorkExpRouter.post('/addExpCareer',WorkExpMiddleware.checkIfUserExist, WorkExpController.AddWorkExpInfo);
+WorkExpRouter.post('/addExpCareer',WorkExpMiddleware.checkAuthentication, WorkExpController.AddWorkExpInfo);
 
-WorkExpRouter.get('/getUserExpInfo/:userId', WorkExpMiddleware.checkIfUserExist, WorkExpController.getUserInfo);
+WorkExpRouter.get('/getUserExpInfo', WorkExpMiddleware.checkAuthentication,WorkExpMiddleware.checkIfInfoExist , WorkExpController.getUserInfo);
 
-WorkExpRouter.put('/updateExpInfo', WorkExpMiddleware.checkAuth, WorkExpController.updateInfo)
+WorkExpRouter.put('/updateExpInfo',WorkExpMiddleware.checkAuthentication,WorkExpMiddleware.checkIfInfoExist, WorkExpMiddleware.checkAuthorization, WorkExpController.updateInfo)
 
-WorkExpRouter.delete('/deleteInfo', WorkExpMiddleware.checkAuth, WorkExpController.deleteInfo)
+WorkExpRouter.delete('/deleteInfo',WorkExpMiddleware.checkAuthentication,WorkExpMiddleware.checkIfInfoExist ,WorkExpMiddleware.checkAuthorization, WorkExpController.deleteInfo)
 
 export default WorkExpRouter

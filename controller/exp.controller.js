@@ -49,7 +49,7 @@ const WorkExpController = {
     }
   },
   getUserInfo: async (req, res) => {
-    const { userId } = req.params;
+    const { userId } = req.body;
     const data = await WorkExpModel.findOne({ userId: userId });
     res.status(201).send({
       data,
@@ -58,7 +58,7 @@ const WorkExpController = {
   },
   updateInfo: async (req, res) => {
     const {
-        _id,
+        id,
         projectName,
         startDate,
         endDate,
@@ -67,7 +67,7 @@ const WorkExpController = {
         role,
         userId,} = req.body;
     const updateData = await WorkExpModel.updateOne(
-      { _id: _id },
+      { _id: id },
       {
         projectName,
         startDate,
@@ -83,9 +83,9 @@ const WorkExpController = {
     })
   },
   deleteInfo: async (req, res) => {
-    const {_id} = req.body;
+    const {id} = req.body;
     const deletaData = await WorkExpModel.deleteOne(
-        {_id: _id}
+        {_id: id}
     );
     res.status(201).send({
         message: 'Success'

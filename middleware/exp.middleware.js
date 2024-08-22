@@ -3,31 +3,46 @@ import WorkExpModel from "../model/skill.js";
 import UserModel from "../model/user.js";
 
 const WorkExpMiddleware = {
-    checkIfUserExist: async (req, res, next) => {
-        try {
-            const {userId} = req.body;
-            const result = await UserModel.findById(userId);
-            if(!result) throw new Error("Không tồn tại Id của User này")
-            return next()
-        } catch (error) {
-            res.status(401).send({
-                message: error.message
-            })
-        }
-    },
-    checkAuth: async (req, res, next) => {
-        try {
-            const{userId, _id} = req.body;
-            if(!userId || !_id) throw new Error("Thiếu thông tin cần thiết")
-            const data = await WorkExpModel.findOne({_id: _id})
-            if(String(data.userId) !== String(userId)) throw new Error("Bạn ko có quyền chỉnh sửa thông tin!")
-            next();
-        } catch (error) {
-            res.status(401).send({
-                message: error.message
-            })
-        }
+  checkAuthentication: async (req, res, next) => {
+    try {
+      const { userId, password } = req.body;
+      if (!userId || !password) throw new Error("Yêu cầu nhập đủ id và password");
+      const data = await UserModel.findOne({ _id: userId });
+      if (!data || String(data.password) !== String(password))
+        throw new Error("Sai tên tài khoản hoặc mật khẩu");
+      return next();
+    } catch (error) {
+      res.status(401).send({
+        message: error.message,
+      });
     }
+  },
+  checkIfInfoExist: async (req, res, next) => {
+    try {
+      const { userId } = req.body;
+      const result = await WorkExpModel.findOne({userId:userId});
+      if (!result) throw new Error("Không tồn tại Info của Id này");
+      return next();
+    } catch (error) {
+      res.status(401).send({
+        message: error.message,
+      });
+    }
+  },
+  checkAuthorization: async (req, res, next) => {
+    try {
+      const { userId, id } = req.body;
+      if (!userId || !id) throw new Error("Thiếu thông tin cần thiết");
+      const data = await WorkExpModel.findOne({ _id: id });
+      if (String(data.userId) !== String(userId))
+        throw new Error("Bạn ko có quyền chỉnh sửa thông tin!");
+      next();
+    } catch (error) {
+      res.status(401).send({
+        message: error.message,
+      });
+    }
+  },
 };
 
-export default WorkExpMiddleware
+export default WorkExpMiddleware;
